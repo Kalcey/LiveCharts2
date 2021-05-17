@@ -238,6 +238,16 @@ namespace LiveChartsCore
 
                 foreach (var series in toDeleteSeries)
                 {
+                    if (series is IDrawableSeries<TDrawingContext> drawableSeries)
+                    {
+                        foreach (var item in drawableSeries.DeletingTasks)
+                        {
+                            canvas.RemovePaintTask(item);
+                            item.Dispose();
+                        }
+                        drawableSeries.DeletingTasks.Clear();
+                    }
+
                     series.Dispose();
                     _ = _everMeasuredSeries.Remove(series);
                 }
